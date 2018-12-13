@@ -31,4 +31,4 @@ s.push('two');
 s.push('three');
 
 s.pop();
-console.log(s.peek())
+console.log(s.peek()) // two
