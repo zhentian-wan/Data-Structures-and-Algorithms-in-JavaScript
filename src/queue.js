@@ -106,3 +106,5 @@ pq.dequeue()
 pq.enqueue('Emergency task!', true)
 console.log(pq.dequeue())
 console.log(pq.peek())
+
+

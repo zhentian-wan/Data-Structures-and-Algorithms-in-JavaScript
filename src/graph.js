@@ -1,4 +1,4 @@
-
+const {createQueue} = require('./queue');
 
 function createNode(key) {
     let children = [];
@@ -51,7 +51,46 @@ function createGraph(directed = false) {
 
                 return result;
             }).join('\n')
-        }
+        },
+        /**
+         * Breadth First Search
+         */
+        bfs (startNodeKey = "", visitFn = () => {}) {
+            /**
+             * Keytake away:
+             * 1. Using Queue to get next visit node
+             * 2. Enqueue the node's children for next run
+             * 3. Hashed visited map for keep tracking visited node
+             */
+            const startNode =  this.getNode(startNodeKey);
+           // create a hashed map to check whether one node has been visited
+           const visited = this.nodes.reduce((acc, curr) => {
+               acc[curr.key] = false;
+               return acc;
+           }, {});  
+        
+           // Create a queue to put all the nodes to be visited
+           const queue = createQueue();
+           queue.enqueue(startNode);
+        
+           // start process
+           while (!queue.isEmpty()) {
+              const current = queue.dequeue();
+        
+              // check wheather the node exists in hashed map
+              if (!visited[current.key]) {
+                  visitFn(current);
+                  visited[current.key] = true;
+        
+                  // process the node's children
+                  current.children.map(n => {
+                    if (!visited[n.key]) {
+                        queue.enqueue(n);
+                    }
+                  });
+              }
+           }
+        } 
     }
 }
 
@@ -73,11 +112,7 @@ graph.addEdge('Tali', 'Kyle')
 
 console.log(graph.print())
 
-/**
- * Breadth First Search
- */
-function bfs () {
-}
+
 
 const nodes = ['a', 'b', 'c', 'd', 'e', 'f']
 const edges = [
@@ -100,7 +135,6 @@ nodes.forEach(node => {
     graph2.addEdge(...nodes)
   })
 
-  
   graph2.bfs('a', node => {
     console.log(node.key)
   })
