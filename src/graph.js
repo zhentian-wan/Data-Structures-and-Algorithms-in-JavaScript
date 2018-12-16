@@ -90,7 +90,36 @@ function createGraph(directed = false) {
                   });
               }
            }
-        } 
+        },
+
+        /**
+         * Depth First Search
+         */
+        dfs (startNodeKey = "", visitFn = () => {}) {
+            // get starting node
+            const startNode = this.getNode(startNodeKey);
+            // create hashed map
+            const visited = this.nodes.reduce((acc, curr) => {
+                acc[curr] = false;
+                return acc;
+            }, {});
+            function explore(node) {
+                // if already visited node, return
+                if (visited[node.key]) {
+                    return;
+                }
+                // otherwise call the callback function
+                visitFn(node);
+                // Set nodekey to be visited
+                visited[node.key] = true;
+                // Continue to explore its children
+                node.children.forEach(n => {
+                    explore(n);
+                });
+            }
+            // start exploring
+            explore(startNode);
+        }
     }
 }
 
@@ -135,6 +164,12 @@ nodes.forEach(node => {
     graph2.addEdge(...nodes)
   })
 
+  console.log('***Breadth first graph***')
   graph2.bfs('a', node => {
+    console.log(node.key)
+  })
+
+  console.log('***Depth first graph***')
+  graph2.dfs('a', node => {
     console.log(node.key)
   })
