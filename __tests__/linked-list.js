@@ -1,4 +1,4 @@
-const {createLinkedList} = require('../src/linked-list');
+const {createLinkedList} = require('../src/data-structure/linked-list');
 
 describe('linked list', () => {
     test('push: should add node into array', () => {

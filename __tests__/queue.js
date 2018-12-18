@@ -1,4 +1,4 @@
-const {createQueue, createPriorityQueue} = require("../src/queue");
+const {createQueue, createPriorityQueue} = require("../src/data-structure/linked-listqueue");
 
 describe("Queue test", () => {
   test("should be first in first out", () => {
