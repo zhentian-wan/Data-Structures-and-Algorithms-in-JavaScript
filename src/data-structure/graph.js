@@ -1,14 +1,22 @@
 const {createQueue} = require('./queue');
 
-function createNode(key) {
+function createNode(key, rest) {
     let children = [];
     return {
         key,
         children,
+        ...rest,
         addChild(child) {
             children.push(child)
         }
     }
+}
+
+function createVistedMap (nodes) {
+    return nodes.reduce((acc, curr) => {
+        acc[curr.key] = false;
+        return acc;
+    }, {});
 }
 
 function createGraph(directed = false) {
@@ -20,8 +28,8 @@ function createGraph(directed = false) {
         edges,
         directed,
 
-        addNode(key) {
-            nodes.push(createNode(key))
+        addNode(key, rest) {
+            nodes.push(createNode(key, rest))
         },
 
         getNode (key) {
@@ -90,6 +98,25 @@ function createGraph(directed = false) {
                   });
               }
            }
+        },
+
+        bfs2 (startNodeKey, predFn = () => {}, cb = () => {}) {
+            const startNode = this.getNode(startNodeKey);
+            const visited = createVistedMap(this.nodes);
+            const queue = createQueue();
+            startNode.children.forEach((n) => {
+                queue.enqueue(n);
+            });
+            while (!queue.isEmpty()) {
+                const current = queue.dequeue();
+                if (!visited[current.key]) {
+                    if (predFn(current)) return cb(current);
+                    else {
+                        visited[current.key] = true;
+                    }
+                }
+            }
+            cb(null)
         },
 
         /**
@@ -173,3 +200,36 @@ nodes.forEach(node => {
   graph2.dfs('a', node => {
     console.log(node.key)
   })
+
+let graph3 = createGraph(true)
+const tyler = {key: 'tyler', dog: false};
+const henry = {key: 'henry', dog: false};
+const john = {key: 'john', dog: false};
+const aimee = {key: 'aimee', dog: true};
+const peggy = {key: 'peggy', dog: false};
+const keli = {key: 'keli', dog: false};
+const claire = {key: 'claire', dog: false};
+
+graph3.addNode('tyler', tyler);
+graph3.addNode('henry', henry);
+graph3.addNode('john', john);
+graph3.addNode('claire', claire);
+graph3.addNode('aimee', aimee);
+graph3.addNode('peggy', peggy)
+graph3.addNode('keli', keli);
+
+graph3.addEdge('tyler', 'henry')
+graph3.addEdge('tyler', 'john')
+graph3.addEdge('tyler', 'aimee')
+graph3.addEdge('henry', 'keli')
+graph3.addEdge('henry', 'peggy')
+graph3.addEdge('john', 'john')
+graph3.addEdge('keli', 'claire')
+
+
+graph3.bfs2('tyler', (node) => {
+    return node.dog;
+}, (node) => {
+    if (node) console.log(`${node.key} has a dog`)
+    else console.log('Tyler friends has no dog')
+})
