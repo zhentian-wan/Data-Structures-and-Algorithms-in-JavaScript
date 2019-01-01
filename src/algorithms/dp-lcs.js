@@ -1,5 +1,5 @@
  /**
- * FIND THE LONGEST COMMON SEQUENCES BY USING DYNAMICE PROGRAMMING
+ * FIND THE LONGEST COMMON subsequence BY USING DYNAMICE PROGRAMMING
  *
  * @params:
  * str1: string
@@ -15,7 +15,7 @@ function LCS(str1, str2) {
     const memo = [...Array(str1.length)].map(e => Array(str2.length));
   
     /**
-     * @return longest common sequence string
+     * @return longest common subsequence string
      */
     function helper(str1, str2, i1, i2, memo) {
       console.log(`str1, str2, ${i1}, ${i2}`);
