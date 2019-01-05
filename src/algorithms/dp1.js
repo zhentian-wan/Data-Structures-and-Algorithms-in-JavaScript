@@ -39,3 +39,42 @@ console.log(MaxProductSubstring([-2.5,4,0,3,0.5,8,-1])); // 12
  }
 
  console.log(MaxProductSubsequence([-2.5,4,0,3,0.5,8,-1].sort((a, b) => {return a-b})))
+
+ /**
+  * Maximum Contiguous subarray algorithm
+  * 
+  * Max(i) = Max(i-1) + v(i)
+  * Max(i-1) < 0 ? v(i) : Max(i-1)
+  * 
+  * Combining
+---------
+maxInc(i) = maxInc(i - 1) > 0 ? maxInc(i - 1) + val(i) : val(i)
+max(i) = maxInc(i) > max(i - 1) ? maxInc(i) : max(i - 1)
+  */
+
+const numbers = [-2, 1, 3, 4, -1, 2, 1, -5, 4];
+function maxSubArray (ary) {
+    if (ary.length === 0) {
+        return [];
+    }
+
+    let maxInc = ary[0];
+    let max = ary[0];
+    let maxStartInx = 0;
+    let maxEndInx = 0;
+
+    for (let i = 0; i < ary.length; i++) {
+        const val = ary[i];
+
+        if (val === max) {
+            maxStartInx = i
+        }
+
+        if (maxInc === max) {
+            maxEndInx = i
+        }
+
+        return Array.slice(maxStartInx, maxEndInx + 1)
+    }
+}
+console.log('maxSubArray', maxSubArray(numbers));
