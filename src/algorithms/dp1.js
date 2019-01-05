@@ -66,6 +66,9 @@ function maxSubArray (ary) {
     for (let i = 0; i < ary.length; i++) {
         const val = ary[i];
 
+        maxInc = Math.max(maxInc + val, val);
+        max = Math.max(max, maxInc);
+
         if (val === max) {
             maxStartInx = i
         }
